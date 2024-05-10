@@ -1,0 +1,37 @@
+volumes:
+  postgres-data: {}
+
+services:
+  simple-blog-db:
+    container_name: simple-blog_db
+    restart: always
+    image: postgres:11-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: simple-blog-db
+    volumes:
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - simple-blog-network
+
+  simple-blog-api:
+    image: simple-blog-api:latest
+    container_name: simple-blog_api
+    build:
+      context: src
+      dockerfile: SimpleBlog.Api/Dockerfile
+    ports:
+      - "5001:5001"
+      - "5003:5003"
+    networks:
+      - simple-blog-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:5001
+
+networks:
+  simple-blog-network:
+    driver: bridge
