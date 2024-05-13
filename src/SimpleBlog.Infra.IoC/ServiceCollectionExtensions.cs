@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SimpleBlog.Application.Helpers;
 using SimpleBlog.Application.Interfaces;
 using SimpleBlog.Application.Services;
+using SimpleBlog.Domain.Interfaces;
+using SimpleBlog.Infra.Data.Repositories;
 
 namespace SimpleBlog.Infra.IoC
 {
@@ -12,10 +15,14 @@ namespace SimpleBlog.Infra.IoC
         //public static void RegisterInfra(this IServiceCollection services)
         //    => services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        //public static void RegisterRepositories(this IServiceCollection services)
-        //    => services.AddScoped<IBookRepository, BookRepository>();
+        public static void RegisterRepositories(this IServiceCollection services)
+            => services.AddScoped<IUserRepository, UserRepository>();
 
         public static void RegisterServices(this IServiceCollection services)
-            => services.AddScoped<IAuthAppService, AuthAppService>();
+        {
+            services.AddScoped<IAuthAppService, AuthAppService>();
+            services.AddScoped<IUserService, UsersService>();
+            services.AddTransient<ICryptoPassHelper, CryptoPassHelper>();
+        }
     }
 }

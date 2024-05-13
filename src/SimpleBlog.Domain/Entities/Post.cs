@@ -2,15 +2,9 @@
 {
     public class Post : BaseDomain
     {
-        public Post(Guid userIdInclusion, DateTime inclusionDate) : base(userIdInclusion, inclusionDate)
-        {
-        }
-
-        public Guid PostId { get; private set; }
-        public string Title { get; private set; } = string.Empty;
-        public string Message { get; private set; } = string.Empty;
-
-        public Guid PostUserId { get; private set; }
-
+        public Guid PostId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+        public Guid PostUserId { get; set; }
     }
 }

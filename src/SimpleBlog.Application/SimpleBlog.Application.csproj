@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SimpleBlog.Domain\SimpleBlog.Domain.csproj" />
     <ProjectReference Include="..\SimpleBlog.Infra.Data\SimpleBlog.Infra.Data.csproj" />
   </ItemGroup>

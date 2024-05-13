@@ -7,7 +7,7 @@ namespace SimpleBlog.Api.Controllers
     public class AuthController : MainController
     {
         [HttpPost("authenticate")]
-        public async Task<IActionResult> AuthenticateUser(UserViewModel userViewModel, [FromServices] IAuthAppService authAppService)
+        public async Task<IActionResult> AuthenticateUser(CreateUserViewModel userViewModel, [FromServices] IAuthAppService authAppService)
         {
             if (!ModelState.IsValid)
             {
@@ -15,6 +15,7 @@ namespace SimpleBlog.Api.Controllers
             }
 
             var sigInResponse = await authAppService.SignInResultVerify(userViewModel);
+
             return Ok(sigInResponse);
         }
     }

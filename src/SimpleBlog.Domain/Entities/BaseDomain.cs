@@ -2,17 +2,10 @@
 {
     public class BaseDomain
     {
-        public BaseDomain(Guid userIdInclusion, DateTime inclusionDate)
-        {
-            Active = true;
-            UserIdInclusion = userIdInclusion;
-            InclusionDate = inclusionDate;
-        }
-
-        public bool Active { get; private set; }
-        public Guid UserIdInclusion { get; private set; }
-        public Guid UserChanged { get; private set; }
-        public DateTime InclusionDate { get; private set; }
-        public DateTime ChangeDate { get; private set; }
+        public bool Active { get; set; }
+        public Guid UserIdInclusion { get; set; }
+        public Guid UserChanged { get; set; }
+        public DateTime InclusionDate { get; set; }
+        public DateTime ChangeDate { get; set; }
     }
 }
