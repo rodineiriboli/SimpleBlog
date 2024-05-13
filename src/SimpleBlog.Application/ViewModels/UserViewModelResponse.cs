@@ -7,5 +7,6 @@
         public string Email { get; set; } = string.Empty;
         public bool Active { get; set; } = false;
         public DateTime InclusionDate { get; set; }
+        public string Role { get; set; } = "User-Role";
     }
 }

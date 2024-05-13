@@ -14,17 +14,17 @@ namespace SimpleBlog.Infra.Data.Repositories
             _context = context;
         }
 
-        public Users? GetUserById(Guid guid)
+        public async Task<Users?> GetUserById(Guid guid)
         {
             var user = _context.Find<Users>(guid);
 
             return user;
         }
-        public Users? GetUserByEmail(string email)
+        public async Task<Users?> GetUserByEmail(string email)
         {
-            var user = _context.Users
+            var user = await _context.Users
                         .Where(u => u.Email.Equals(email))
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
             return user;
         }

@@ -9,20 +9,18 @@ namespace SimpleBlog.Infra.IoC
 {
     public static class ServiceCollectionExtensions
     {
-        //public static void AddRoyalLibraryDbContext(this IServiceCollection services, string connectionString)
-        //    => services.AddDbContext<IRoyalLibraryDbContext, RoyalLibraryDbContext>(options => options.UseSqlServer(connectionString));
-
-        //public static void RegisterInfra(this IServiceCollection services)
-        //    => services.AddScoped<IUnitOfWork, UnitOfWork>();
-
         public static void RegisterRepositories(this IServiceCollection services)
-            => services.AddScoped<IUserRepository, UserRepository>();
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
+        }
 
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthAppService, AuthAppService>();
             services.AddScoped<IUserService, UsersService>();
             services.AddTransient<ICryptoPassHelper, CryptoPassHelper>();
+            services.AddTransient<IPostService, PostService>();
         }
     }
 }

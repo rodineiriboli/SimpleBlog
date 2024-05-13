@@ -20,9 +20,9 @@ namespace SimpleBlog.Application.Services
             _cryptoPassHelper = cryptoPassHelper;
         }
 
-        public CreateUserViewModel CreateUser(CreateUserViewModel userViewModelRequest)
+        public async Task<CreateUserViewModel?> CreateUser(CreateUserViewModel userViewModelRequest)
         {
-            var userFound = _userRepository.GetUserByEmail(userViewModelRequest.Email);
+            var userFound = await _userRepository.GetUserByEmail(userViewModelRequest.Email);
 
             if (userFound is null)
             {
@@ -34,14 +34,17 @@ namespace SimpleBlog.Application.Services
                 user.Password = _cryptoPassHelper.CreatePass(userViewModelRequest.Password, user.SaltKey);
 
                 _userRepository.AddUser(user);
+
+                return _mapper.Map<CreateUserViewModel>(user);
             }
 
-            return userViewModelRequest;
+            return null;
+
         }
 
-        public UserViewModelResponse? GetUserByEmail(string email)
+        public async Task<UserViewModelResponse?> GetUserByEmail(string email)
         {
-            var userFound = _userRepository.GetUserByEmail(email);
+            var userFound = await _userRepository.GetUserByEmail(email);
 
             if (userFound is not null)
             {

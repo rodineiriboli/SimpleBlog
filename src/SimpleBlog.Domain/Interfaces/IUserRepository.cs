@@ -4,8 +4,8 @@ namespace SimpleBlog.Domain.Interfaces
 {
     public interface IUserRepository
     {
-        Users? GetUserById(Guid guid);
-        Users? GetUserByEmail(string email);
+        Task<Users?> GetUserById(Guid guid);
+        Task<Users?> GetUserByEmail(string email);
         Users AddUser(Users user);
     }
 }

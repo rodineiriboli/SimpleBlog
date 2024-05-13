@@ -4,7 +4,7 @@ using SimpleBlog.Domain.Entities;
 
 namespace SimpleBlog.Infra.Data.Map
 {
-    public class MapUser : IEntityTypeConfiguration<Users>
+    public class MapUsers : IEntityTypeConfiguration<Users>
     {
         public void Configure(EntityTypeBuilder<Users> builder)
         {
@@ -19,7 +19,9 @@ namespace SimpleBlog.Infra.Data.Map
             builder.Property(p => p.Password).HasMaxLength(100).HasColumnName(nameof(Users.Password).ToLower()).IsRequired();
             builder.Property(p => p.SaltKey).HasMaxLength(100).HasColumnName(nameof(Users.SaltKey).ToLower()).IsRequired();
             builder.Property(p => p.Active).HasColumnName(nameof(Users.Active).ToLower()).IsRequired();
-            builder.Property(p => p.InclusionDate).HasColumnName(nameof(Users.InclusionDate).ToLower()).IsRequired();
+            builder.Property(p => p.InclusionDate)
+                .HasConversion(p => p.ToUniversalTime(), p => DateTime.SpecifyKind(p, DateTimeKind.Utc))
+                .HasColumnName(nameof(Users.InclusionDate).ToLower()).IsRequired();
         }
     }
 }

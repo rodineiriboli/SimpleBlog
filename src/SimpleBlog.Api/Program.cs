@@ -10,18 +10,6 @@ namespace SimpleBlog.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
-            builder.Configuration
-            .SetBasePath(builder.Environment.ContentRootPath)
-            .AddJsonFile("appsettings.json", true, true)
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
-            .AddEnvironmentVariables();
-
-            //services.AddJwtConfiguration(configuration);
-            builder.Services.AddJwtConfiguration(builder.Configuration);
-
-
-
             // Database
             builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
@@ -33,12 +21,20 @@ namespace SimpleBlog.Api
             builder.Services.RegisterRepositories();
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
             builder.Services.AddEndpointsApiExplorer();
 
             //Add Swagger Configuration
             builder.Services.AddSwaggerConfiguration();
 
+            builder.Configuration
+            .SetBasePath(builder.Environment.ContentRootPath)
+            .AddJsonFile("appsettings.json", true, true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+            .AddEnvironmentVariables();
+
+            //JWT
+            builder.Services.AddJwtConfiguration(builder.Configuration);
 
             //AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -54,6 +50,7 @@ namespace SimpleBlog.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers();
 

@@ -21,5 +21,7 @@
         public string Password { get; set; } = string.Empty;
         public bool Active { get; set; }
         public DateTime InclusionDate { get; set; }
+
+        public ICollection<Posts> Posts { get; set; } = new List<Posts>();
     }
 }

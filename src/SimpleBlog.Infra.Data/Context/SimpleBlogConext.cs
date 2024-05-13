@@ -9,10 +9,12 @@ namespace SimpleBlog.Infra.Data.Context
         public SimpleBlogConext(DbContextOptions<SimpleBlogConext> options) : base(options) { }
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<Posts> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new MapUser());
+            modelBuilder.ApplyConfiguration(new MapUsers());
+            modelBuilder.ApplyConfiguration(new MapPosts());
         }
 
 
@@ -21,6 +23,12 @@ namespace SimpleBlog.Infra.Data.Context
         {
             AddTimestamps();
             return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            AddTimestamps();
+            return base.SaveChangesAsync(cancellationToken);
         }
 
         private void AddTimestamps()

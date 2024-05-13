@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SimpleBlog.Api.Controllers
 {
     [ApiController]
+    //[Authorize]
     public abstract class MainController : Controller
     {
         protected ICollection<string> Erros = new List<string>();
