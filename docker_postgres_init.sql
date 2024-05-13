@@ -34,6 +34,6 @@ CREATE TABLE users
 
 	INSERT INTO Posts
 	(Id, Title, Message, UserId, Active, InclusionDate, ChangeDate)
-	VALUES('2ae90450-9040-4f3d-900b-cd7565a1231a', 'Title teste mensagem', 'Esta é uma mensagem de teste populada inicialmente na base...', '2ae90450-9040-4f3d-900b-cd7565a1231c', TRUE, current_timestamp, NULL);
+	VALUES('2ae90450-9040-4f3d-900b-cd7565a1231a', 'Title teste mensagem', 'Esta é uma mensagem de teste populada inicialmente na base...', '2ae90450-9040-4f3d-900b-cd7565a1231c', TRUE, current_timestamp, current_timestamp);
 
 COMMIT;

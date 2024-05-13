@@ -15,7 +15,8 @@ services:
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
       - ./postgres-data:/var/lib/postgresql/data
     networks:
-      - simple-blog-network
+      simple-blog-network:
+        ipv4_address: 172.20.0.2
 
   simple-blog-api:
     image: simple-blog-api:latest
@@ -27,7 +28,9 @@ services:
       - "5001:5001"
       - "5003:5003"
     networks:
-      - simple-blog-network
+      simple-blog-network:
+        ipv4_address: 172.20.0.3
+      
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:5001
@@ -35,3 +38,7 @@ services:
 networks:
   simple-blog-network:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16

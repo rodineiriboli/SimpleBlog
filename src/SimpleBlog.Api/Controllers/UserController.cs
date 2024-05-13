@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SimpleBlog.Api.Settings;
@@ -15,10 +13,12 @@ namespace SimpleBlog.Api.Controllers
     public class UserController : MainController
     {
         private readonly AppJwtSettings _jwtSettings;
+        //private readonly IHubContext<HubProvider> _hubContext;
 
-        public UserController(IOptions<AppJwtSettings> jwtSettings)
+        public UserController(IOptions<AppJwtSettings> jwtSettings)//, IHubContext<HubProvider> hubContext)
         {
             _jwtSettings = jwtSettings.Value;
+            //_hubContext = hubContext;
         }
 
         [HttpPost]
@@ -52,6 +52,14 @@ namespace SimpleBlog.Api.Controllers
         public async Task<ActionResult> GetUserByEmailAsync(string email, [FromServices] IUserService userService)
         {
             var userViewModelResponse = await userService.GetUserByEmail(email);
+
+            //var msg = new PostMessage
+            //{
+            //    IdPost = Guid.NewGuid(),
+            //    Title = "Testando broadcast",
+            //    BodyMessage = "simples teste do body"
+            //};
+            //await _hubContext.Clients.All.SendAsync("ReceiveMessage", msg);
 
             if (userViewModelResponse is not null)
             {

@@ -17,10 +17,9 @@ namespace SimpleBlog.Infra.IoC
 
         public static void RegisterServices(this IServiceCollection services)
         {
-            services.AddScoped<IAuthAppService, AuthAppService>();
             services.AddScoped<IUserService, UsersService>();
             services.AddTransient<ICryptoPassHelper, CryptoPassHelper>();
-            services.AddTransient<IPostService, PostService>();
+            services.AddScoped<IPostService, PostService>();
         }
     }
 }

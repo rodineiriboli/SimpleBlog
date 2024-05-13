@@ -1,4 +1,5 @@
 using SimpleBlog.Api.Configuration;
+using SimpleBlog.Application.Hubs;
 using SimpleBlog.Application.Mappers;
 using SimpleBlog.Infra.IoC;
 
@@ -13,12 +14,12 @@ namespace SimpleBlog.Api
             // Database
             builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
-
-            // Add services to the container.
-
             //IoC
             builder.Services.RegisterServices();
             builder.Services.RegisterRepositories();
+
+            //SignalR - Web Socket
+            builder.Services.AddSignalR();
 
             builder.Services.AddControllers();
 
@@ -46,6 +47,14 @@ namespace SimpleBlog.Api
             {
                 app.UseSwaggerSetup();
             }
+            
+
+            app.UseCors(cors =>
+            cors//.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            /*.WithOrigins("")*/);
 
             app.UseHttpsRedirection();
 
@@ -53,6 +62,8 @@ namespace SimpleBlog.Api
             app.UseAuthentication();
 
             app.MapControllers();
+
+            app.MapHub<HubProvider>("new-post");
 
             app.Run();
         }

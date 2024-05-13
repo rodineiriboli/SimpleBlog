@@ -17,8 +17,6 @@ namespace SimpleBlog.Infra.Data.Context
             modelBuilder.ApplyConfiguration(new MapPosts());
         }
 
-
-
         public override int SaveChanges()
         {
             AddTimestamps();
