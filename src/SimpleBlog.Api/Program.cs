@@ -1,5 +1,4 @@
 using SimpleBlog.Api.Configuration;
-using SimpleBlog.Application.Hubs;
 using SimpleBlog.Application.Mappers;
 using SimpleBlog.Infra.IoC;
 
@@ -19,7 +18,7 @@ namespace SimpleBlog.Api
             builder.Services.RegisterRepositories();
 
             //SignalR - Web Socket
-            builder.Services.AddSignalR();
+            //builder.Services.AddSignalR();
 
             builder.Services.AddControllers();
 
@@ -58,12 +57,12 @@ namespace SimpleBlog.Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 
-            app.MapHub<HubProvider>("new-post");
+            //app.MapHub<HubProvider>("new-post");
 
             app.Run();
         }

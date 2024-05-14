@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimpleBlog.Application.Interfaces;
 using SimpleBlog.Application.ViewModels;
 
@@ -6,6 +7,25 @@ namespace SimpleBlog.Api.Controllers
 {
     public class PostController : MainController
     {
+
+        [HttpGet]
+        [Route("get-post/{id:guid}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(UserViewModelResponse), 200)]
+        public async Task<ActionResult> Get(Guid id, [FromServices] IPostService postService)
+        {
+            var postResponse = await postService.GetById(id);
+            return CustomResponse(postResponse);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("getAll-posts")]
+        public async Task<ActionResult> GetAll([FromServices] IPostService postService)
+        {
+            IEnumerable<PostViewModelResponse> postResponse = await postService.GetAll();
+            return CustomResponse(postResponse);
+        }
+
         [HttpPost]
         [Route("create-post")]
         [Produces("application/json")]
@@ -34,12 +54,6 @@ namespace SimpleBlog.Api.Controllers
             }
         }
 
-        [HttpDelete("delete-post")]
-        public async Task<ActionResult> Delete(Guid id, [FromServices] IPostService postService)
-        {
-            return CustomResponse(await postService.Remove(id));
-        }
-
         [HttpPut("update-post")]
         public async Task<ActionResult> Update(UpdatePostViewModel updatePostViewModel, [FromServices] IPostService postService)
         {
@@ -47,18 +61,10 @@ namespace SimpleBlog.Api.Controllers
             return CustomResponse(postResponse);
         }
 
-        [HttpGet("get-post/{id:guid}")]
-        public async Task<ActionResult> Get(Guid id, [FromServices] IPostService postService)
+        [HttpDelete("delete-post")]
+        public async Task<ActionResult> Delete(Guid id, [FromServices] IPostService postService)
         {
-            var postResponse = await postService.GetById(id);
-            return CustomResponse(postResponse);
-        }
-
-        [HttpGet("get-post")]
-        public async Task<ActionResult> GetAll([FromServices] IPostService postService)
-        {
-            IEnumerable<PostViewModelResponse> postResponse = await postService.GetAll();
-            return CustomResponse(postResponse);
+            return CustomResponse(await postService.Remove(id));
         }
     }
 }

@@ -4,7 +4,7 @@ namespace SimpleBlog.Application.ViewModels
 {
     public class CreateUserViewModel
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         [Required(ErrorMessage = "O campo Nome é obrigatório")]
         public string Name { get; set; } = string.Empty;

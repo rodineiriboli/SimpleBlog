@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace SimpleBlog.Api.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public abstract class MainController : Controller
     {
         protected ICollection<string> Erros = new List<string>();

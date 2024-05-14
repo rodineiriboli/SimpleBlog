@@ -22,7 +22,7 @@ namespace SimpleBlog.Api.Configuration
                 x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Insira o token seguindo este padrão: Bearer {token}",
-                    Name = "Autorization",
+                    Name = "Authorization",
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
@@ -40,7 +40,7 @@ namespace SimpleBlog.Api.Configuration
                                 Id = "Bearer"
                             }
                         },
-                        new string[]{}
+                        Array.Empty<string>()
                     }
                 });
             });

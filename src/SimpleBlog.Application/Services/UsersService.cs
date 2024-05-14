@@ -20,26 +20,24 @@ namespace SimpleBlog.Application.Services
             _cryptoPassHelper = cryptoPassHelper;
         }
 
-        public async Task<CreateUserViewModel?> CreateUser(CreateUserViewModel userViewModelRequest)
+        public async Task<UserViewModelResponse?> CreateUser(CreateUserViewModel userViewModelRequest)
         {
             var userFound = await _userRepository.GetUserByEmail(userViewModelRequest.Email);
 
-            if (userFound is null)
+            if (userFound is not null)
             {
-                var user = _mapper.Map<Users>(userViewModelRequest);
-
-                user.Id = Guid.NewGuid();
-                user.Active = true;
-                user.SaltKey = _cryptoPassHelper.CreateSaltSaltKey();
-                user.Password = _cryptoPassHelper.CreatePass(userViewModelRequest.Password, user.SaltKey);
-
-                _userRepository.AddUser(user);
-
-                return _mapper.Map<CreateUserViewModel>(user);
+                throw new Exception("Este e-mail já está sendo utilizado");
             }
+            var user = _mapper.Map<Users>(userViewModelRequest);
 
-            return null;
+            user.Id = Guid.NewGuid();
+            user.Active = true;
+            user.SaltKey = _cryptoPassHelper.CreateSaltSaltKey();
+            user.Password = _cryptoPassHelper.CreatePass(userViewModelRequest.Password, user.SaltKey);
 
+            _userRepository.AddUser(user);
+
+            return _mapper.Map<UserViewModelResponse>(user);
         }
 
         public async Task<UserViewModelResponse?> GetUserByEmail(string email)
@@ -50,7 +48,21 @@ namespace SimpleBlog.Application.Services
             {
                 return _mapper.Map<UserViewModelResponse>(userFound);
             }
+            return null;
+        }
 
+        public async Task<UserViewModelResponse?> GetUserByEmailPassword(string email, string password)
+        {
+            var userFound = await _userRepository.GetUserByEmail(email);
+
+            if (userFound is not null)
+            {
+                var pass = _cryptoPassHelper.CreatePass(password, userFound.SaltKey);
+
+                var userFoundauthorizedLogin = await _userRepository.GetUserAuthorized(email, pass);
+
+                return _mapper.Map<UserViewModelResponse?>(userFoundauthorizedLogin);
+            }
             return null;
         }
     }

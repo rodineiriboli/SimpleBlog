@@ -16,7 +16,7 @@ namespace SimpleBlog.Infra.Data.Repositories
 
         public async Task<Users?> GetUserById(Guid guid)
         {
-            var user = _context.Find<Users>(guid);
+            var user = await _context.FindAsync<Users>(guid);
 
             return user;
         }
@@ -37,5 +37,13 @@ namespace SimpleBlog.Infra.Data.Repositories
             return user;
         }
 
+        public async Task<Users?> GetUserAuthorized(string email, string pass)
+        {
+            var user = await _context.Users
+                        .Where(u => u.Email.Equals(email) && u.Password.Equals(pass))
+                        .FirstOrDefaultAsync();
+
+            return user;
+        }
     }
 }

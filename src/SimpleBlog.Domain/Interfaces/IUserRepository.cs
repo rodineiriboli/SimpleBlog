@@ -7,5 +7,6 @@ namespace SimpleBlog.Domain.Interfaces
         Task<Users?> GetUserById(Guid guid);
         Task<Users?> GetUserByEmail(string email);
         Users AddUser(Users user);
+        Task<Users?> GetUserAuthorized(string email, string pass);
     }
 }

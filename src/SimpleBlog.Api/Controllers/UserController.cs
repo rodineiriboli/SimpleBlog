@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SimpleBlog.Api.Settings;
@@ -21,58 +22,61 @@ namespace SimpleBlog.Api.Controllers
             //_hubContext = hubContext;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("authentication")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(UserLoginResponseViewModel), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> GetUserAuthorized(string email, string password, [FromServices] IUserService userService)
+        {
+            try
+            {
+                var userViewModelResponse = await userService.GetUserByEmailPassword(email, password);
+                if (userViewModelResponse is not null)
+                {
+                    var userLoginResponseViewModel = GenerateJwt(userViewModelResponse);
+
+                    return Ok(userLoginResponseViewModel);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return CustomResponse(ex.Message);
+            }
+        }
+
         [HttpPost]
+        [AllowAnonymous]
         [Route("create-user")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(List<CreateUserViewModel>), 200)]
+        [ProducesResponseType(typeof(UserViewModelResponse), 200)]
+        [ProducesResponseType(204)]
         public async Task<ActionResult> AuthenticateUserAsync(CreateUserViewModel userViewModel, [FromServices] IUserService userService)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return CustomResponse(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return CustomResponse(ModelState);
+                }
+                var userViewModelResponse = await userService.CreateUser(userViewModel);
+                if (userViewModelResponse is not null)
+                {
+                    var userLoginResponseViewModel = GenerateJwt(userViewModelResponse);
+
+                    return Ok(userLoginResponseViewModel);
+                }
+                return NoContent();
             }
-
-            var userViewModelResponse = await userService.CreateUser(userViewModel);
-
-            if (userViewModelResponse is not null)
+            catch (Exception ex)
             {
-                return Ok(userViewModelResponse);
+                return CustomResponse(ex.Message);
             }
-
-            return NoContent();
-
         }
 
-        [HttpGet]
-        //[AllowAnonymous]
-        [Route("get-user")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(List<UserLoginResponseViewModel>), 200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult> GetUserByEmailAsync(string email, [FromServices] IUserService userService)
-        {
-            var userViewModelResponse = await userService.GetUserByEmail(email);
-
-            //var msg = new PostMessage
-            //{
-            //    IdPost = Guid.NewGuid(),
-            //    Title = "Testando broadcast",
-            //    BodyMessage = "simples teste do body"
-            //};
-            //await _hubContext.Clients.All.SendAsync("ReceiveMessage", msg);
-
-            if (userViewModelResponse is not null)
-            {
-                var userLoginResponseViewModel = await GenerateJwt(userViewModelResponse, email);
-
-                return Ok(userLoginResponseViewModel);
-            }
-
-            return NotFound();
-
-        }
-
-        private async Task<UserLoginResponseViewModel> GenerateJwt(UserViewModelResponse user, string email)
+        private UserLoginResponseViewModel GenerateJwt(UserViewModelResponse user)
         {
             string encodedToken = EncodeToken(user);
 
@@ -89,6 +93,7 @@ namespace SimpleBlog.Api.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Issuer = _jwtSettings.Sender,
