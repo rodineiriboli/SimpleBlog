@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SimpleBlog.Application.Helpers;
+using SimpleBlog.Application.Hubs.Service;
 using SimpleBlog.Application.Interfaces;
 using SimpleBlog.Application.Services;
 using SimpleBlog.Domain.Interfaces;
@@ -20,6 +21,8 @@ namespace SimpleBlog.Infra.IoC
             services.AddScoped<IUserService, UsersService>();
             services.AddTransient<ICryptoPassHelper, CryptoPassHelper>();
             services.AddScoped<IPostService, PostService>();
+
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

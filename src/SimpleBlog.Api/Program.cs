@@ -1,4 +1,5 @@
 using SimpleBlog.Api.Configuration;
+using SimpleBlog.Application.Hubs;
 using SimpleBlog.Application.Mappers;
 using SimpleBlog.Infra.IoC;
 
@@ -10,15 +11,15 @@ namespace SimpleBlog.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //SignalR - Web Socket
+            builder.Services.AddSignalR();
+
             // Database
             builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
             //IoC
             builder.Services.RegisterServices();
             builder.Services.RegisterRepositories();
-
-            //SignalR - Web Socket
-            //builder.Services.AddSignalR();
 
             builder.Services.AddControllers();
 
@@ -62,7 +63,7 @@ namespace SimpleBlog.Api
 
             app.MapControllers();
 
-            //app.MapHub<HubProvider>("new-post");
+            app.MapHub<NotificationHub>("/chatHub");
 
             app.Run();
         }

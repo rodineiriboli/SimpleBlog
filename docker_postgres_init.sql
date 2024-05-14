@@ -15,8 +15,7 @@ CREATE TABLE users
 
 	INSERT INTO Users
 		(Id, Name, Email, Password, SaltKey, Active, InclusionDate)
-	VALUES('2ae90450-9040-4f3d-900b-cd7565a1231c', 'Rodinei Riboli', 'rodineir@teste.com.br', '5ebbdf2a-5852-4eee-876b-f8df9708efbe', '234ceee3e5b9e2844af663547da0b4b3661c10306c8e291f68e9af2037469527', 
-	TRUE, current_timestamp);
+	VALUES('70a5e624-381f-4cbc-9edc-b277a387f6ef',	'Diego', 'user1@example.com',	'bc6e60a158f637d2cf91380e30f40e515700ec956506e117afe8eef23d1ae77f',	'BeekARPD/MD2xp+pbxJ4ux8ILpPYm8xCppOTxdNP2Sc=',	true,	current_timestamp);
 
 
 	CREATE TABLE posts
@@ -34,6 +33,8 @@ CREATE TABLE users
 
 	INSERT INTO Posts
 	(Id, Title, Message, UserId, Active, InclusionDate, ChangeDate)
-	VALUES('2ae90450-9040-4f3d-900b-cd7565a1231a', 'Title teste mensagem', 'Esta é uma mensagem de teste populada inicialmente na base...', '2ae90450-9040-4f3d-900b-cd7565a1231c', TRUE, current_timestamp, current_timestamp);
+	VALUES('0a448cca-d1d9-4ba3-a1de-6e4eb233a97a',	'Teste ok2',	'Mensagem de esperança',	'70a5e624-381f-4cbc-9edc-b277a387f6ef',	true,	current_timestamp, current_timestamp);
+
+	
 
 COMMIT;

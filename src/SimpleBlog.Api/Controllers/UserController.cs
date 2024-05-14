@@ -14,12 +14,10 @@ namespace SimpleBlog.Api.Controllers
     public class UserController : MainController
     {
         private readonly AppJwtSettings _jwtSettings;
-        //private readonly IHubContext<HubProvider> _hubContext;
 
-        public UserController(IOptions<AppJwtSettings> jwtSettings)//, IHubContext<HubProvider> hubContext)
+        public UserController(IOptions<AppJwtSettings> jwtSettings)
         {
             _jwtSettings = jwtSettings.Value;
-            //_hubContext = hubContext;
         }
 
         [HttpGet]

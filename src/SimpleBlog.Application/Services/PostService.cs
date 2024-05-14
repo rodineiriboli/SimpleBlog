@@ -23,7 +23,7 @@ namespace SimpleBlog.Application.Services
         {
             try
             {
-                var user = _userRepository.GetUserById(postViewModel.UserId);
+                var user = await _userRepository.GetUserById(postViewModel.UserId);
                 if (user is null)
                 {
                     throw new Exception("Usuário não encontrado");
@@ -35,9 +35,7 @@ namespace SimpleBlog.Application.Services
                 post.Active = true;
 
                 var postCreated = await _postRepository.AddPost(post);
-
                 var postResponde = _mapper.Map<CreatePostResponse>(postCreated);
-
                 return postResponde;
             }
             catch (Exception)
@@ -49,40 +47,31 @@ namespace SimpleBlog.Application.Services
         public async Task<IEnumerable<PostViewModelResponse>> GetAll()
         {
             var posts = await _postRepository.GetAll();
-
             var postsResponse = _mapper.Map<IEnumerable<PostViewModelResponse>>(posts);
-
             return postsResponse;
         }
 
         public async Task<PostViewModelResponse> GetById(Guid id)
         {
             var postResponse = _mapper.Map<PostViewModelResponse>(await _postRepository.GetById(id));
-
             return postResponse;
         }
 
         public async Task<PostViewModelResponse> Remove(Guid id)
         {
             var post = await _postRepository.GetById(id);
-
             if (post is not null)
             {
                 post.Active = false;
                 await _postRepository.UpdatePost(post);
             }
-
-
             var postResponse = _mapper.Map<PostViewModelResponse>(post);
-
             return postResponse;
         }
 
         public async Task<PostViewModelResponse> Update(UpdatePostViewModel updatePostViewModel)
         {
             var post = await _postRepository.GetById(updatePostViewModel.Id);
-
-
             if (post is not null)
             {
                 if (post.UserId == updatePostViewModel.UserId)
@@ -93,9 +82,7 @@ namespace SimpleBlog.Application.Services
                     await _postRepository.UpdatePost(post);
                 }
             }
-
             var postResponse = _mapper.Map<PostViewModelResponse>(post);
-
             return postResponse;
         }
     }
