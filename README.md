@@ -1,5 +1,5 @@
 # SimpleBlog
-Uma aplicação simples, implementada com boa práticas fazendo o uso de websocket para comunicação em tempo real.
+Uma aplicação que implementada boa práticas no desenvolvimento. Fazendo o uso de websocket para comunicação em tempo real.
 
 Para subir a aplicação é necessário:
 
